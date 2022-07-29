@@ -5,54 +5,59 @@ orbs:
 jobs:
 
 # Exercise: Infrastructure Creation
-  create_infrastructure: 
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      # - run:
-      #     name: Install tar utility
-      #     command: |
-      #       yum install -y tar gzip
-      - run:
-          name: Create Cloudformation Stack
-          command: |
-            aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
-              --region us-east-1
-#       - run: 
-#           name: Get Ansible Inventory
-#           command: sleep 10 && aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
-#           when: on_success
-#       - persist_to_workspace:
-#           root: ~/
-#           paths:
-#             - inventory
+#   create_infrastructure: 
+#     docker:
+#       - image: amazon/aws-cli
+#     steps:
+#       - checkout
+#       - run:
+#           name: Create Cloudformation Stack
+#           command: |
+#             aws cloudformation deploy \
+#               --template-file template.yml \
+#               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+#               --region us-east-1
 
 # Exercise: Config and Deployment
-  configure_infrastructure: 
-    docker:
-      - image: python:3.7.13-alpine
-    steps:
-      - checkout
-      - add_ssh_keys:
-              fingerprints: ["90:bf:dc:0c:9b:49:49:c5:31:07:3e:e1:d4:e2:24:50"]
-      - run:
-          name: Install Ansible
-          command: |
-            apk add --update ansible
-#       - attach_workspace:
-#           at: ~/
-      - run:
-          name: Run Playbook and Configure server
-          command: |
-            ansible-playbook -i inventory main.yml
+#   configure_infrastructure: 
+#     docker:
+#       - image: python:3.7.13-alpine
+#     steps:
+#       - checkout
+#       - add_ssh_keys:
+#               fingerprints: ["90:bf:dc:0c:9b:49:49:c5:31:07:3e:e1:d4:e2:24:50"]
+#       - run:
+#           name: Install Ansible
+#           command: |
+#             apk add --update ansible
+#       - run:
+#           name: Run Playbook and Configure server
+#           command: |
+#             ansible-playbook -i inventory main.yml
+            
+# Exercise: Smoke Testing
+  smoke_test:
+   docker:
+     - image: alpine:latest
+   steps:
+     - run: apk add --update curl
+     - run:
+         name: smoke test
+         command: |
+           URL="https://blog.udacity.com/"
+           # Test if website exists
+           if curl -s --head ${URL} 
+           then
+             return 0
+           else
+             return 1
+           fi
 
 workflows:
   my_workflow:
       jobs:
-        - create_infrastructure
-        - configure_infrastructure:
-            requires:
-            - create_infrastructure
+#         - create_infrastructure
+#         - configure_infrastructure:
+#             requires:
+#             - create_infrastructure
+        - smoke_test
