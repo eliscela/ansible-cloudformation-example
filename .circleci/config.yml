@@ -37,7 +37,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-              fingerprints: ["e9:6e:72:68:47:5d:89:5a:ae:b0:75:9b:35:d9:16:05"]
+              fingerprints: ["90:bf:dc:0c:9b:49:49:c5:31:07:3e:e1:d4:e2:24:50"]
       - run:
           name: Install Ansible
           command: |
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i ~/inventory.txt main.yml
+            cat ~/inventory.txt && ansible-playbook -i ~/inventory.txt main.yml
 
 workflows:
   my_workflow:
