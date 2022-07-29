@@ -28,7 +28,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - inventory.txt
+            - inventory
 
 # Exercise: Config and Deployment
   configure_infrastructure: 
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            cat ~/inventory && ansible-playbook -i ~/inventory main.yml
+            ansible-playbook -i ~/inventory main.yml
 
 workflows:
   my_workflow:
