@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            cat ~/inventory && chmod 400 ~/.ssh/id_rsa_2a6dcb053f4baa47d454636e632b4d3d && ansible-playbook -i ~/inventory main.yml --private-key ~/.ssh/id_rsa_2a6dcb053f4baa47d454636e632b4d3d
+            ansible-playbook -i ~/inventory main.yml
 
 workflows:
   my_workflow:
