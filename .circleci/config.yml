@@ -23,12 +23,12 @@ jobs:
               --region us-east-1
       - run: 
           name: Get Ansible Inventory
-          command: sleep 10 && aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
+          command: echo "[all]\r\n" > ~/inventory.txt && sleep 10 && aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory.txt
           when: on_success
       - persist_to_workspace:
           root: ~/
           paths:
-            - inventory
+            - inventory.txt
 
 # Exercise: Config and Deployment
   configure_infrastructure: 
@@ -37,7 +37,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-              fingerprints: ["2a:6d:cb:05:3f:4b:aa:47:d4:54:63:6e:63:2b:4d:3d"]
+              fingerprints: ["e9:6e:72:68:47:5d:89:5a:ae:b0:75:9b:35:d9:16:05"]
       - run:
           name: Install Ansible
           command: |
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i ~/inventory main.yml
+            ansible-playbook -i ~/inventory.txt main.yml
 
 workflows:
   my_workflow:
