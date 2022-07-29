@@ -10,10 +10,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install tar utility
-          command: |
-            yum install -y tar gzip
+      # - run:
+      #     name: Install tar utility
+      #     command: |
+      #       yum install -y tar gzip
       - run:
           name: Create Cloudformation Stack
           command: |
@@ -33,7 +33,7 @@ jobs:
 # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.7.13-alpine
     steps:
       - checkout
       - add_ssh_keys:
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i inventory main.yml
+            ansible-playbook -i inventory main.yml --private-key ~/.ssh/id_rsa_90bfdc0c9b4949c531073ee1d4e22450
 
 workflows:
   my_workflow:
