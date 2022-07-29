@@ -23,7 +23,7 @@ jobs:
               --region us-east-1
       - run: 
           name: Get Ansible Inventory
-          command: echo "[all]\r\n" > ~/inventory.txt && sleep 10 && aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory.txt
+          command: sleep 10 && aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
           when: on_success
       - persist_to_workspace:
           root: ~/
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            cat ~/inventory.txt && ansible-playbook -i ~/inventory.txt main.yml
+            cat ~/inventory && ansible-playbook -i ~/inventory main.yml
 
 workflows:
   my_workflow:
