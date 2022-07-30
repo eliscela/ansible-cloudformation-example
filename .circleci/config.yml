@@ -45,6 +45,7 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             ansible-playbook -i inventory main.yml
+      - destroy_environment
             
 # Exercise: Smoke Testing
   smoke_test:
@@ -55,7 +56,8 @@ jobs:
          name: Test job
          # Fail the job intentionally to simulate an error.
          command:  return 1
-     - destroy_environment  
+     - destroy_environment
+        
 
 workflows:
   my_workflow:
@@ -66,5 +68,5 @@ workflows:
             - create_infrastructure
         - smoke_test:
             requires:
-            - create_infrastructure
+            - configure_infrastructure
         
