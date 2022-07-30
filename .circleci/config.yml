@@ -43,9 +43,13 @@ jobs:
           command: |
             apk add --update ansible
       - run:
-          name: Run Playbook and Configure server
+          name: Install AWS CLI
           command: |
-            ansible-playbook -i inventory main.yml
+            pip3 install awscliv2
+      # - run:
+      #     name: Run Playbook and Configure server
+      #     command: |
+      #       ansible-playbook -i inventory main.yml
       - destroy_environment
             
 # Exercise: Smoke Testing
